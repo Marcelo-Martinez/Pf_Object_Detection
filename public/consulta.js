@@ -9,9 +9,10 @@ $("#Consultar").click(function () {
   // cambio
   $.get("/search", timeMargin).done(function (data) {
     console.log(data);
-
-    for (let i = 0; i < data.length; i++) {
-      const element = array[i];
-    }
+    data.forEach((element) => {
+      $("#tbody1").append(
+        `<tr> <th>${element.classes}</th> <th>${element.scores}</th> <th>${element.formatTime}</th>  </tr>`
+      );
+    });
   });
 });
