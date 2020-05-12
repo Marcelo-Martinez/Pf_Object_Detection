@@ -79,27 +79,43 @@
     <script>
       const socket = io();
 
-      socket.on("ClassData", (classesDb) => {
-        clase1.innerHTML = `${classesDb}`;
-        console.log(classesDb);
-      });
-
-      socket.on("ScoreData", (scoresDb) => {
-        clase11.innerHTML = `${scoresDb}`;
-        console.log(scoresDb);
-      });
-
-      socket.on("formattime", (formatTime) => {
-        clase111.innerHTML = `${formatTime}`;
-      });
-
       const vm = new Vue({
         el: "#vapp",
-        data: {},
+        data: {
+          batchID: "1",
+          detections: [],
+          clases: {
+            "1": "Bandeja",
+            "2": "Penne Bueno",
+            "3": "Penne Malo",
+            "4": "Tornillo Bueno",
+            "5": "Tornillo Malo",
+            "6": "Codo Bueno",
+            "7": "Codo Malo",
+            "8": "Spaghetti Bueno",
+            "9": "Spaghetti Malo",
+            "10": "Concha Buena",
+            "11": "Concha Mala",
+          },
+        },
         methods: {
           goTo: (url) => {
             document.location = url;
           },
+        },
+        created() {
+          socket.on("Detection", (detection) => {
+            result = detection.split("%");
+            if (result[0] != this.batchID) {
+              this.detections = [];
+              this.batchID = result[0];
+            }
+            this.detections.push({
+              class: this.clases[result[1]],
+              score: result[2],
+              time: result[3],
+            });
+          });
         },
         template: `
       <div class="base">
@@ -115,10 +131,10 @@
                 </div>
 
                 <div class="row justify-content-center">
-                  <div class="col-md-8 align-self-center">
+                  <div class="col-md-6 align-self-center">
                     <img id="webcam" style="-webkit-user-select: none;" src="http://localhost:3456/video_feed"></img> 
                   </div>
-                  <div class="col-md-4 align-self-center">
+                  <div class="col-md-6 align-self-center">
                     <table class="table table-striped">
                       <thead>
                         <tr>
@@ -128,40 +144,10 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td id="clase1"></td>
-                          <td id="clase11"></td>
-                          <td id="clase111"></td>
-                        </tr>
-                        <tr>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                        </tr>
-                        <tr>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                        </tr>
-                        <tr>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                        </tr>
-                        <tr>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                        </tr>
-                        <tr>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                        </tr>
-                        <tr>
-                          <td></td>
-                          <td></td>
-                          <td></td>
+                        <tr v-for="detection in detections" >
+                          <td>{{detection.class}}</td>
+                          <td>{{detection.score}}</td>
+                          <td>{{detection.time}}</td>
                         </tr>
                       </tbody>
                     </table>

@@ -38,53 +38,8 @@ io.on("connect", (client) => {
     console.log("usuario desconectado");
   });
 
-  client.on("ClassData", (classesDb) => {
-    // Conversion Int to Class
-    // Conversion Int to Class
-    if (classesDb == 1) {
-      classesDb = "Bandeja";
-    }
-    if (classesDb == 2) {
-      classesDb = "Penne Bueno";
-    }
-    {
-      if (classesDb == 3) {
-        classesDb = "Penne Malo";
-      }
-      if (classesDb == 4) {
-        classesDb = "Tornillo Bueno";
-      }
-      if (classesDb == 5) {
-        classesDb = "Tornillo Malo";
-      }
-      if (classesDb == 6) {
-        classesDb = "Codo Bueno";
-      }
-      if (classesDb == 7) {
-        classesDb = "Codo Malo";
-      }
-      if (classesDb == 8) {
-        classesDb = "Spaghetti Bueno";
-      }
-      if (classesDb == 9) {
-        classesDb = "Spaghetti Malo";
-      }
-      if (classesDb == 10) {
-        classesDb = "Concha Buena";
-      }
-      if (classesDb == 11) {
-        classesDb = "Concha Mala";
-      }
-    }
-    client.broadcast.emit("ClassData", classesDb);
-  });
-
-  client.on("ScoreData", (ScoresDb) => {
-    client.broadcast.emit("ScoreData", ScoresDb);
-  });
-
-  client.on("formattime", (formatTime) => {
-    client.broadcast.emit("formattime", formatTime);
+  client.on("Detection", (detection) => {
+    client.broadcast.emit("Detection", detection);
   });
 });
 
